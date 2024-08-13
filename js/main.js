@@ -1,54 +1,40 @@
-// Array para almacenar el menú de comidas
-let menuComidas = [
-    { name: "Pizza", price: 3400 },
-    { name: "Milanesa", price: 7000 },
-    { name: "Hamburguesa", price: 7500 },
-    { name: "Asado", price: 11000 },
-    { name: "Lomito", price: 8000 },
-    { name: "Empanadas", price: 1300 },
-    { name: "Sandwich", price: 3000 },
-    { name: "Ensalada", price: 2500 }
-];
-
-// Array para almacenar el menú de bebidas
-let menuBebidas = [
-    { name: "Coca Cola", price: 1300 },
-    { name: "Sprite", price: 1200 },
-    { name: "Agua", price: 700 },
-    { name: "Cerveza", price: 2000 },
-    { name: "Vino", price: 2300 }
+// Array para almacenar el menú de productos (comidas y bebidas)
+let menuProductos = [
+    { name: "Pizza", price: 3400, categoria: "comida" },
+    { name: "Milanesa", price: 7000, categoria: "comida" },
+    { name: "Hamburguesa", price: 7500, categoria: "comida" },
+    { name: "Asado", price: 11000, categoria: "comida" },
+    { name: "Lomito", price: 8000, categoria: "comida" },
+    { name: "Empanadas", price: 1300, categoria: "comida" },
+    { name: "Sandwich", price: 3000, categoria: "comida" },
+    { name: "Ensalada", price: 2500, categoria: "comida" },
+    { name: "Coca Cola", price: 1300, categoria: "bebida" },
+    { name: "Sprite", price: 1200, categoria: "bebida" },
+    { name: "Agua", price: 700, categoria: "bebida" },
+    { name: "Cerveza", price: 2000, categoria: "bebida" },
+    { name: "Vino", price: 2300, categoria: "bebida" }
 ];
 
 // Array para almacenar los artículos en el carrito
 let carrito = [];
 
-// Función para mostrar el menú de comidas
-function mostrarMenuComidas() {
-    let mensaje = "Menú de comidas:\n";
-    for (let i = 0; i < menuComidas.length; i++) {
-        mensaje += (i + 1) + ". " + menuComidas[i].name + " - $" + menuComidas[i].price.toFixed(2) + "\n";
-    }
+// Función para mostrar el menú filtrado por categoría
+function mostrarMenu(categoria) {
+    let productosFiltrados = menuProductos.filter(producto => producto.categoria === categoria);
+    let mensaje = `Menú de ${categoria}s:\n`;
+    productosFiltrados.forEach((producto, index) => {
+        mensaje += `${index + 1}. ${producto.name} - $${producto.price.toFixed(2)}\n`;
+    });
     console.log(mensaje);
     alert(mensaje);
 }
 
-// Función para mostrar el menú de bebidas
-function mostrarMenuBebidas() {
-    let mensaje = "Menú de bebidas:\n";
-    for (let i = 0; i < menuBebidas.length; i++) {
-        mensaje += (i + 1) + ". " + menuBebidas[i].name + " - $" + menuBebidas[i].price.toFixed(2) + "\n";
-    }
-    console.log(mensaje);
-    alert(mensaje);
-}
-
-// Función para poner algo en el carrito
-function añadirAlCarrito(indiceArticulo, tipo) {
-    let menu = tipo === "comida" ? menuComidas : menuBebidas;
-    // Verificar si el índice es válido
-    if (indiceArticulo >= 0 && indiceArticulo < menu.length) {
-        carrito.push(menu[indiceArticulo]);
-        let mensaje = "Añadido al carrito: " + menu[indiceArticulo].name;
+// Función para añadir un artículo al carrito
+function añadirAlCarrito(indiceArticulo, categoria) {
+    let productosFiltrados = menuProductos.filter(producto => producto.categoria === categoria);
+    if (indiceArticulo >= 0 && indiceArticulo < productosFiltrados.length) {
+        carrito.push(productosFiltrados[indiceArticulo]);
+        let mensaje = `Añadido al carrito: ${productosFiltrados[indiceArticulo].name}`;
         console.log(mensaje);
         alert(mensaje);
     } else {
@@ -58,11 +44,10 @@ function añadirAlCarrito(indiceArticulo, tipo) {
     }
 }
 
-// Función para eliminar algo del carrito
+// Función para eliminar un artículo del carrito
 function eliminarDelCarrito(indiceArticulo) {
-    // Verificar si el índice es válido
     if (indiceArticulo >= 0 && indiceArticulo < carrito.length) {
-        let mensaje = "Eliminado del carrito: " + carrito[indiceArticulo].name;
+        let mensaje = `Eliminado del carrito: ${carrito[indiceArticulo].name}`;
         console.log(mensaje);
         alert(mensaje);
         carrito.splice(indiceArticulo, 1);
@@ -82,17 +67,17 @@ function mostrarCarrito() {
     } else {
         let mensaje = "Carrito de compras:\n";
         let total = 0;
-        for (let i = 0; i < carrito.length; i++) {
-            mensaje += (i + 1) + ". " + carrito[i].name + " - $" + carrito[i].price.toFixed(2) + "\n";
-            total += carrito[i].price;
-        }
-        mensaje += "Total: $" + total.toFixed(2);
+        carrito.forEach((producto, index) => {
+            mensaje += `${index + 1}. ${producto.name} - $${producto.price.toFixed(2)}\n`;
+            total += producto.price;
+        });
+        mensaje += `Total: $${total.toFixed(2)}`;
         console.log(mensaje);
         alert(mensaje);
     }
 }
 
-// Función de menu
+// Función para interactuar con el usuario
 function interactuar() {
     let accion;
     while (accion !== "6") {
@@ -107,19 +92,14 @@ function interactuar() {
         );
 
         if (accion === "1") {
-            mostrarMenuComidas();
+            mostrarMenu("comida");
         } else if (accion === "2") {
-            mostrarMenuBebidas();
+            mostrarMenu("bebida");
         } else if (accion === "3") {
             let tipoArticulo = prompt("¿Qué tipo de artículo quieres añadir?\n1. Comida\n2. Bebida");
-            let indiceArticulo = parseInt(prompt("Introduce el número del artículo que quieres añadir al carrito:")) - 1;
-            if (tipoArticulo === "1") {
-                añadirAlCarrito(indiceArticulo, "comida");
-            } else if (tipoArticulo === "2") {
-                añadirAlCarrito(indiceArticulo, "bebida");
-            } else {
-                alert("Tipo de artículo no válido.");
-            }
+            let categoria = tipoArticulo === "1" ? "comida" : "bebida";
+            let indiceArticulo = parseInt(prompt(`Introduce el número del artículo que quieres añadir al carrito de ${categoria}:`)) - 1;
+            añadirAlCarrito(indiceArticulo, categoria);
         } else if (accion === "4") {
             mostrarCarrito();
             let articuloParaEliminar = parseInt(prompt("Introduce el número del artículo que quieres eliminar del carrito:")) - 1;
@@ -130,12 +110,12 @@ function interactuar() {
             mostrarCarrito();
             alert("¡Gracias por comprar!");
         } else {
-            let mensaje = "Opción invalida, por favor intenta de nuevo.";
+            let mensaje = "Opción inválida, por favor intenta de nuevo.";
             console.log(mensaje);
             alert(mensaje);
         }
     }
 }
 
-// Iniciar el comndo
+// Iniciar la interacción con el usuario
 interactuar();
