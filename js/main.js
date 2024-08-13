@@ -1,4 +1,4 @@
-// Array para almacenar el menú de productos (comidas y bebidas)
+// Array para almacenar el menú de productos
 let menuProductos = [
     { name: "Pizza", price: 3400, categoria: "comida" },
     { name: "Milanesa", price: 7000, categoria: "comida" },
@@ -18,104 +18,72 @@ let menuProductos = [
 // Array para almacenar los artículos en el carrito
 let carrito = [];
 
-// Función para mostrar el menú filtrado por categoría
-function mostrarMenu(categoria) {
-    let productosFiltrados = menuProductos.filter(producto => producto.categoria === categoria);
-    let mensaje = `Menú de ${categoria}s:\n`;
-    productosFiltrados.forEach((producto, index) => {
-        mensaje += `${index + 1}. ${producto.name} - $${producto.price.toFixed(2)}\n`;
+// Cargar el carrito desde localStorage si existe
+if (localStorage.getItem("carrito")) {
+    carrito = JSON.parse(localStorage.getItem("carrito"));
+}
+
+// Función para mostrar el menú de productos
+function mostrarMenu() {
+    const menuComidas = document.getElementById("menu-comidas");
+    const menuBebidas = document.getElementById("menu-bebidas");
+
+    menuProductos.forEach((producto, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `${producto.name} - $${producto.price.toFixed(2)} 
+                        <button onclick="añadirAlCarrito(${index})">Agregar</button>`;
+
+        if (producto.categoria === "comida") {
+            menuComidas.appendChild(li);
+        } else {
+            menuBebidas.appendChild(li);
+        }
     });
-    console.log(mensaje);
-    alert(mensaje);
 }
 
 // Función para añadir un artículo al carrito
-function añadirAlCarrito(indiceArticulo, categoria) {
-    let productosFiltrados = menuProductos.filter(producto => producto.categoria === categoria);
-    if (indiceArticulo >= 0 && indiceArticulo < productosFiltrados.length) {
-        carrito.push(productosFiltrados[indiceArticulo]);
-        let mensaje = `Añadido al carrito: ${productosFiltrados[indiceArticulo].name}`;
-        console.log(mensaje);
-        alert(mensaje);
-    } else {
-        let mensaje = "Índice de artículo no válido.";
-        console.log(mensaje);
-        alert(mensaje);
-    }
-}
-
-// Función para eliminar un artículo del carrito
-function eliminarDelCarrito(indiceArticulo) {
-    if (indiceArticulo >= 0 && indiceArticulo < carrito.length) {
-        let mensaje = `Eliminado del carrito: ${carrito[indiceArticulo].name}`;
-        console.log(mensaje);
-        alert(mensaje);
-        carrito.splice(indiceArticulo, 1);
-    } else {
-        let mensaje = "Índice de artículo no válido.";
-        console.log(mensaje);
-        alert(mensaje);
-    }
+function añadirAlCarrito(indiceArticulo) {
+    carrito.push(menuProductos[indiceArticulo]);
+    guardarCarrito();
+    mostrarCarrito();
 }
 
 // Función para mostrar el carrito
 function mostrarCarrito() {
-    if (carrito.length === 0) {
-        let mensaje = "El carrito está vacío.";
-        console.log(mensaje);
-        alert(mensaje);
-    } else {
-        let mensaje = "Carrito de compras:\n";
-        let total = 0;
-        carrito.forEach((producto, index) => {
-            mensaje += `${index + 1}. ${producto.name} - $${producto.price.toFixed(2)}\n`;
-            total += producto.price;
-        });
-        mensaje += `Total: $${total.toFixed(2)}`;
-        console.log(mensaje);
-        alert(mensaje);
-    }
+    const carritoUl = document.getElementById("carrito");
+    carritoUl.innerHTML = "";
+    let total = 0;
+
+    carrito.forEach((producto, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `${producto.name} - $${producto.price.toFixed(2)} 
+                        <button onclick="eliminarDelCarrito(${index})">Eliminar</button>`;
+        carritoUl.appendChild(li);
+        total += producto.price;
+    });
+
+    document.getElementById("total").textContent = total.toFixed(2);
 }
 
-// Función para interactuar con el usuario
-function interactuar() {
-    let accion;
-    while (accion !== "6") {
-        accion = prompt(
-            "¿Qué te gustaría hacer?\n" +
-            "1. Ver menú de comidas\n" +
-            "2. Ver menú de bebidas\n" +
-            "3. Agregar artículo al carrito\n" +
-            "4. Sacar artículo del carrito\n" +
-            "5. Ver carrito\n" +
-            "6. Salir y mostrar total"
-        );
-
-        if (accion === "1") {
-            mostrarMenu("comida");
-        } else if (accion === "2") {
-            mostrarMenu("bebida");
-        } else if (accion === "3") {
-            let tipoArticulo = prompt("¿Qué tipo de artículo quieres añadir?\n1. Comida\n2. Bebida");
-            let categoria = tipoArticulo === "1" ? "comida" : "bebida";
-            let indiceArticulo = parseInt(prompt(`Introduce el número del artículo que quieres añadir al carrito de ${categoria}:`)) - 1;
-            añadirAlCarrito(indiceArticulo, categoria);
-        } else if (accion === "4") {
-            mostrarCarrito();
-            let articuloParaEliminar = parseInt(prompt("Introduce el número del artículo que quieres eliminar del carrito:")) - 1;
-            eliminarDelCarrito(articuloParaEliminar);
-        } else if (accion === "5") {
-            mostrarCarrito();
-        } else if (accion === "6") {
-            mostrarCarrito();
-            alert("¡Gracias por comprar!");
-        } else {
-            let mensaje = "Opción inválida, por favor intenta de nuevo.";
-            console.log(mensaje);
-            alert(mensaje);
-        }
-    }
+// Función para eliminar un artículo del carrito
+function eliminarDelCarrito(indiceArticulo) {
+    carrito.splice(indiceArticulo, 1);
+    guardarCarrito();
+    mostrarCarrito();
 }
 
-// Iniciar la interacción con el usuario
-interactuar();
+// Función para vaciar el carrito
+document.getElementById("vaciar-carrito").addEventListener("click", () => {
+    carrito = [];
+    guardarCarrito();
+    mostrarCarrito();
+});
+
+// Función para guardar el carrito en localStorage
+function guardarCarrito() {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
+// Iniciar la aplicación mostrando el menú y el carrito
+mostrarMenu();
+mostrarCarrito();
