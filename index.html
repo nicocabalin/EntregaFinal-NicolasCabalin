@@ -4,22 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda de Comida</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
 </head>
 <body>
-    <h1>Bienvenido a la Tienda de Comida</h1>
+    <header>
+        <h1>Tienda de Comida</h1>
+        <!-- Botón de carrito -->
+        <button id="carritoBtn">
+            <img src="assets/carrito-icon.png" alt="Carrito">
+            <span id="carritoCantidad">0</span>
+        </button>
+    </header>
 
-    <h2>Menú de Comidas</h2>
-    <ul id="menu-comidas"></ul>
+    <main class="container">
+        <!-- Sección de comidas -->
+        <section id="comidas">
+            <h2>Comidas</h2>
+            <div id="listaComidas"></div>
+        </section>
 
-    <h2>Menú de Bebidas</h2>
-    <ul id="menu-bebidas"></ul>
+        <!-- Sección de bebidas -->
+        <section id="bebidas">
+            <h2>Bebidas</h2>
+            <div id="listaBebidas"></div>
+        </section>
+    </main>
 
-    <h2>Carrito de Compras</h2>
-    <ul id="carrito"></ul>
-    <p>Total: $<span id="total"></span></p>
-    <button id="vaciar-carrito">Vaciar Carrito</button>
+    <!-- Modal del carrito -->
+    <div id="carritoModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <div id="carritoItems"></div>
+            <div id="carritoTotal"></div>
+            <button onclick="finalizarCompra()">Finalizar compra</button>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
+    <script src="js/carrito.js"></script>
 </body>
 </html>

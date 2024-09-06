@@ -1,0 +1,18 @@
+[
+    { "id": 1, "nombre": "Pizza", "precio": 3400, "categoria": "comida" },
+    { "id": 2, "nombre": "Milanesa", "precio": 7000, "categoria": "comida" },
+    { "id": 3, "nombre": "Hamburguesa", "precio": 7500, "categoria": "comida" },
+    { "id": 4, "nombre": "Coca Cola", "precio": 1300, "categoria": "bebida" },
+    { "id": 5, "nombre": "Cerveza", "precio": 2000, "categoria": "bebida" },
+    { "id": 6, "nombre": "Lomito", "precio": 8500, "categoria": "comida" },
+    { "id": 7, "nombre": "Sprite", "precio": 1200, "categoria": "bebida" },
+    { "id": 8, "nombre": "Pancho", "precio": 2500, "categoria": "comida" },
+    { "id": 9, "nombre": "Asado", "precio": 12000, "categoria": "comida" },
+    { "id": 10, "nombre": "Vino", "precio": 4000, "categoria": "bebida" },
+    { "id": 11, "nombre": "Empanadas x 12un", "precio": 16000, "categoria": "comida" },
+    { "id": 12, "nombre": "Combo niños", "precio": 3000, "categoria": "comida" },
+    { "id": 13, "nombre": "Helado", "precio": 2000, "categoria": "comida" },
+    { "id": 14, "nombre": "Fernet", "precio": 4000, "categoria": "bebida" },
+    { "id": 15, "nombre": "Pollo", "precio": 5000, "categoria": "comida" }
+    
+]
